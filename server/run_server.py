@@ -7,36 +7,18 @@ from hydra import compose, initialize
 import flwr as fl
 from flwr_datasets import FederatedDataset
 
-from dataset import get_tokenizer_and_data_collator_and_propt_formatting
-from client import gen_client_fn
-from utils import get_on_fit_config, fit_weighted_average
-
+from utils.dataset import get_tokenizer_and_data_collator_and_propt_formatting
+from utils.utils import get_on_fit_config, fit_weighted_average, get_evaluate_fn
 
 warnings.filterwarnings("ignore", category=UserWarning)
 
-NUM_ROUNDS = 5
+with initialize(config_path="conf"):
+    cfg = compose(config_name="config")
+NUM_ROUNDS = cfg.num_rounds
+
 save_path = "./results/"
-
-
-def weighted_average(metrics: List[Tuple[int, Metrics]]) -> Metrics:
-    examples = [num_examples for num_examples, _ in metrics]
-
-    # Multiply accuracy of each client by number of examples used
-    train_losses = [num_examples * m["train_loss"] for num_examples, m in metrics]
-    train_accuracies = [
-        num_examples * m["train_accuracy"] for num_examples, m in metrics
-    ]
-    val_losses = [num_examples * m["val_loss"] for num_examples, m in metrics]
-    val_accuracies = [num_examples * m["val_accuracy"] for num_examples, m in metrics]
-
-    # Aggregate and return custom metric (weighted average)
-    return {
-        "train_loss": (train_losses) / sum(examples),
-        "train_accuracy": sum(train_accuracies) / sum(examples),
-        "val_loss": sum(val_losses) / sum(examples),
-        "val_accuracy": sum(val_accuracies) / sum(examples),
-    }
-
+if not os.path.exists(save_path):
+    os.mkdir(save_path)
 
 # Instantiate strategy.
 strategy = fl.server.strategy.FedAvg(
@@ -45,6 +27,7 @@ strategy = fl.server.strategy.FedAvg(
     fraction_evaluate=0.0,  # no client evaluation
     on_fit_config_fn=get_on_fit_config(),
     fit_metrics_aggregation_fn=fit_weighted_average,
+    evaluate_fn=get_evaluate_fn(cfg.model, cfg.train.save_every_round, cfg.num_rounds, save_path)
 )
 
 # ServerApp for Flower-Next

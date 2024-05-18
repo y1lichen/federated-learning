@@ -8,10 +8,10 @@ from hydra import compose, initialize
 import flwr as fl
 from flwr_datasets import FederatedDataset
 
-from dataset import get_tokenizer_and_data_collator_and_propt_formatting
-from client import gen_client_fn
-from utils import get_on_fit_config, fit_weighted_average
-from custom_fds import CustomFederatedDataset
+from utils.dataset import get_tokenizer_and_data_collator_and_propt_formatting
+from utils.client import gen_client_fn
+from utils.utils import get_on_fit_config, fit_weighted_average
+from utils.custom_fds import CustomFederatedDataset
 
 from argparse import ArgumentParser
 from collections import OrderedDict

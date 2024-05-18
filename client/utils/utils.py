@@ -1,4 +1,4 @@
-from client import set_parameters
+from utils.client import set_parameters
 from models import get_model
 
 

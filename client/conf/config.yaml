@@ -15,13 +15,13 @@ model:
 train:
   num_rounds: ${num_rounds}
   save_every_round: 1
-  learning_rate_max: 5e-5
+  learning_rate_max: 5e-4
   learning_rate_min: 1e-6
-  seq_length: 512
+  seq_length: 256
   training_arguments:
     output_dir: null # to be set by hydra
     learning_rate: null # to be set by the client
-    per_device_train_batch_size: 16
+    per_device_train_batch_size: 5
     gradient_accumulation_steps: 1
     logging_steps: 10
     num_train_epochs: 3
@@ -39,4 +39,4 @@ strategy:
 
 client_resources:
   num_cpus: 8
-  num_gpus: 0
+  num_gpus: 4
