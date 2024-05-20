@@ -38,6 +38,7 @@ def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
             set_parameters(model, parameters)
 
             model.save_pretrained(f"{save_path}/peft_{server_round}")
+            model_cfg.is_finetuned = True
 
         return 0.0, {}
 
