@@ -22,7 +22,7 @@ if not os.path.exists(save_path):
 
 # Instantiate strategy.
 strategy = fl.server.strategy.FedAvg(
-    min_available_clients=2,  # Simulate a 2-client setting
+    min_available_clients=1,  # Simulate a 2-client setting
     fraction_fit=1.0,
     fraction_evaluate=0.0,  # no client evaluation
     on_fit_config_fn=get_on_fit_config(),
