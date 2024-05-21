@@ -1,5 +1,6 @@
 # This file is orignal written by Flower Labs GmbH
-# Copyright 2023 Flower Labs GmbH. All Rights Reserved.
+# Copyrig  # Simulate a 2-client settinght 2023 Flower Labs GmbH. All Rights Reserved.
+# In order to load the local dataset without breacking whole mechanism,the code is modified by Jefferson Chen(https://github.com/y1lichen).
 from typing import Dict, Optional, Tuple, Union
 
 import datasets
@@ -60,6 +61,7 @@ class CustomFederatedDataset:
     """
 
     # pylint: disable=too-many-instance-attributes
+    # 不用client id了，每個client有自己的dataset。
     def __init__(
         self,
         *,
@@ -198,6 +200,7 @@ class CustomFederatedDataset:
         Therefore, for such edge cases (for which we have split) the split should
         happen before the resplitting.
         """
+        # 主要改動這裡，改成讀csv檔
         self._dataset = datasets.load_dataset(
             "csv", data_files=self._dataset_path
         )
