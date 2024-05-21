@@ -12,7 +12,7 @@ model:
     peft_lora_r: 32
     peft_lora_alpha: 64
   is_finetuned: False
-  peft_path: "/results/peft_5/"
+  peft_path: "/dataset/g8flwr/results/peft_5/"
 
 train:
   num_rounds: ${num_rounds}
