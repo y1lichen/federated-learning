@@ -47,6 +47,7 @@ def get_model(model_cfg: DictConfig):
 
     model = None
 
+    # 如果peft path不存在代表沒finetune過
     if not os.path.exists(model_cfg.peft_path):
         model = AutoModelForCausalLM.from_pretrained(
             model_cfg.name,
