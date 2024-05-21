@@ -48,8 +48,6 @@ def get_model(model_cfg: DictConfig):
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_cfg.peft_path, torch_dtype=torch.float16
         ).to("cuda")
-        base_model = model.peft_config["default"].base_model_name_or_path
-        tokenizer = AutoTokenizer.from_pretrained(base_model)
 
     model = prepare_model_for_kbit_training(
         model, use_gradient_checkpointing=model_cfg.gradient_checkpointing
