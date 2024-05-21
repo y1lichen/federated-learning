@@ -5,6 +5,7 @@ from transformers import BitsAndBytesConfig
 from peft import get_peft_model, LoraConfig
 from peft.utils import prepare_model_for_kbit_training
 from peft import AutoPeftModelForCausalLM
+import os
 
 import math
 
@@ -45,7 +46,8 @@ def get_model(model_cfg: DictConfig):
     )
 
     model = None
-    if not model_cfg.is_finetuned:
+
+    if not os.path.exists(model_cfg.peft_path):
         model = AutoModelForCausalLM.from_pretrained(
             model_cfg.name,
             quantization_config=quantization_config,

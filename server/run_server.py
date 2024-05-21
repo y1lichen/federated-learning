@@ -27,7 +27,7 @@ strategy = fl.server.strategy.FedAvg(
     fraction_evaluate=0.0,  # no client evaluation
     on_fit_config_fn=get_on_fit_config(),
     fit_metrics_aggregation_fn=fit_weighted_average,
-    evaluate_fn=get_evaluate_fn(cfg.model, cfg.train.save_every_round, cfg.num_rounds, save_path)
+    evaluate_fn=get_evaluate_fn(cfg, cfg.train.save_every_round, cfg.num_rounds, save_path)
 )
 
 # ServerApp for Flower-Next
