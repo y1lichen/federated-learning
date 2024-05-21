@@ -37,6 +37,13 @@ def get_model(model_cfg: DictConfig):
             f"Use 4-bit or 8-bit quantization. You passed: {model_cfg.quantization}/"
         )
 
+    peft_config = LoraConfig(
+        r=model_cfg.lora.peft_lora_r,
+        lora_alpha=model_cfg.lora.peft_lora_alpha,
+        lora_dropout=0.075,
+        task_type="CAUSAL_LM",
+    )
+
     model = None
     if not model_cfg.is_finetuned:
         model = AutoModelForCausalLM.from_pretrained(
@@ -44,20 +51,14 @@ def get_model(model_cfg: DictConfig):
             quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
         )
+        model = prepare_model_for_kbit_training(
+            model, use_gradient_checkpointing=model_cfg.gradient_checkpointing
+        )
     else:
+        # 如果是load之前finetuned過的model，本來就是peft model了，所以可以直接回傳
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_cfg.peft_path, torch_dtype=torch.float16
         ).to("cuda")
 
-    model = prepare_model_for_kbit_training(
-        model, use_gradient_checkpointing=model_cfg.gradient_checkpointing
-    )
-
-    peft_config = LoraConfig(
-        r=model_cfg.lora.peft_lora_r,
-        lora_alpha=model_cfg.lora.peft_lora_alpha,
-        lora_dropout=0.075,
-        task_type="CAUSAL_LM",
-    )
 
     return get_peft_model(model, peft_config)
