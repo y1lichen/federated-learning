@@ -4,6 +4,7 @@ from transformers import AutoModelForCausalLM
 from transformers import BitsAndBytesConfig
 from peft import get_peft_model, LoraConfig
 from peft.utils import prepare_model_for_kbit_training
+from peft import AutoPeftModelForCausalLM
 
 import math
 
