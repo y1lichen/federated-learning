@@ -5,6 +5,8 @@ pyrightconfig.json
 
 data/
 
+outputs/
+
 # Editor
 .vscode
 
