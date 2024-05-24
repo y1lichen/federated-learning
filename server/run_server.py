@@ -30,7 +30,6 @@ strategy = fl.server.strategy.FedAvg(
     evaluate_fn=get_evaluate_fn(cfg, cfg.train.save_every_round, cfg.num_rounds, save_path)
 )
 
-# ServerApp for Flower-Next
 server = fl.server.start_server(
     server_address="0.0.0.0:8080",
     config=fl.server.ServerConfig(num_rounds=NUM_ROUNDS),

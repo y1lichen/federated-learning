@@ -1,7 +1,7 @@
 # Federated Instruction Tuning on General Dataset
 ---
 
-num_clients: 20 # total number of clients
+num_clients: 2 # total number of clients
 num_rounds: 5
 
 model:
@@ -41,4 +41,4 @@ strategy:
 
 client_resources:
   num_cpus: 8
-  num_gpus: 4
+  num_gpus: 3
