@@ -1,6 +1,5 @@
 import flwr as fl
 import argparse
-import numpy as np
 
 import os
 from hydra import compose, initialize
