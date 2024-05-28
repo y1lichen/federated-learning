@@ -15,9 +15,6 @@ def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
             # Init model
             model = get_model(model_cfg)
             set_parameters(model, parameters)
-
-            model.save_pretrained(f"{save_path}/peft_{server_round}")
-
         return 0.0, {}
 
     return evaluate

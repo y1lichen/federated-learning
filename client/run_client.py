@@ -1,19 +1,16 @@
 from argparse import ArgumentParser, ArgumentTypeError
 import os
-from typing import Callable, Dict, Tuple
-import warnings
-from flwr.common import NDArrays
+from typing import Dict, Tuple
+
 from hydra import compose, initialize
 
 import flwr as fl
-from flwr_datasets import FederatedDataset
 
 from utils.dataset import get_tokenizer_and_data_collator_and_propt_formatting
-from utils.client import gen_client_fn
+
 from utils.utils import get_on_fit_config, fit_weighted_average
 from utils.custom_fds import CustomFederatedDataset
 
-from argparse import ArgumentParser
 from collections import OrderedDict
 
 import torch
@@ -29,16 +26,13 @@ from models import get_model, cosine_annealing
 NUM_ROUNDS = 5
 save_path = "./results/"
 
+# 載入config
 with initialize(config_path="conf"):
     cfg = compose(config_name="config")
 
-# Reset the number of number
 cfg.num_rounds = NUM_ROUNDS
 cfg.train.num_rounds = NUM_ROUNDS
 
-# Create output directory
-if not os.path.exists(save_path):
-    os.mkdir(save_path)
 
 # Partition dataset and get dataloaders
 # We set the number of partitions to 20 for fast processing.
@@ -51,12 +45,13 @@ if not os.path.exists(save_path):
 
 
 def main(dataset_path: str):
+    # 載入dataset
     fds = CustomFederatedDataset(
         dataset_path=dataset_path, partitioners={"train": cfg.num_clients}
     )
     trainset = fds.load_partition(0)
 
-    # Flower client
+    # Client
     class CustomClient(fl.client.NumPyClient):
         def __init__(
             self,
@@ -81,19 +76,20 @@ def main(dataset_path: str):
 
             self.trainset = trainset
 
+        # 取得目前checkpoint訓練的參數
         def get_parameters(self, config: Dict[str, Scalar]) -> NDArrays:
-            """Return the parameters of the current net."""
-
             state_dict = get_peft_model_state_dict(self.model)
             return [val.cpu().numpy() for _, val in state_dict.items()]
 
+        # 載入目前訓練checkpoint
         def set_parameters(self, model, parameters: NDArrays) -> None:
-            """Change the parameters of the model using the given ones."""
             peft_state_dict_keys = get_peft_model_state_dict(model).keys()
             params_dict = zip(peft_state_dict_keys, parameters)
             state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
             set_peft_model_state_dict(model, state_dict)
 
+        # 訓練
+        # 回傳的是目前checkpoint訓練的參數、這輪的loss
         def fit(
             self, parameters: NDArrays, config: Dict[str, Scalar]
         ) -> Tuple[NDArrays, int, Dict]:
@@ -145,7 +141,7 @@ def main(dataset_path: str):
     )
 
 
-# 確定有file
+# 確定dataset的path存在
 def validate_file(f):
     if not os.path.exists(f):
         # Argparse uses the ArgumentTypeError to give a rejection message like:
@@ -166,8 +162,5 @@ if __name__ == "__main__":
         metavar="FILE",
     )
     args = parser.parse_args()
-    fds = CustomFederatedDataset(
-        dataset_path=args.filename, partitioners={"train": cfg.num_clients}
-    )
     main(args.filename)
     # print(args.filename)

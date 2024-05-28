@@ -8,6 +8,9 @@ from peft.utils import prepare_model_for_kbit_training
 import math
 
 
+# 利用cosine函數來簡低learning rate
+# 見 https://blog.csdn.net/Roaddd/article/details/113260677
+# loss越低時，learing rate會低，讓model盡量接近loss最低點
 def cosine_annealing(
     current_round: int,
     total_round: int,
@@ -20,13 +23,14 @@ def cosine_annealing(
     return lrate_min + 0.5 * (lrate_max - lrate_min) * (1 + math.cos(cos_inner))
 
 
+# 取得要訓練的model
 def get_model(model_cfg: DictConfig):
     """Load model with appropriate quantization config and other optimizations.
 
     Please refer to this example for `peft + BitsAndBytes`:
     https://github.com/huggingface/peft/blob/main/examples/fp4_finetuning/finetune_fp4_opt_bnb_peft.py
     """
-
+    # quantization只能用4，用8在deepflow就跑不了了
     if model_cfg.quantization == 4:
         quantization_config = BitsAndBytesConfig(load_in_4bit=True)
     elif model_cfg.quantization == 8:

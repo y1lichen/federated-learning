@@ -14,6 +14,7 @@ from flwr_datasets.utils import (
 )
 
 
+# 改寫Dataset來讀本地檔案，因為本來的dataset是讀huggingface網路上的檔案
 class CustomFederatedDataset:
     """Representation of a dataset for federated learning/evaluation/analytics.
 
@@ -60,7 +61,6 @@ class CustomFederatedDataset:
     >>> centralized = mnist_fds.load_full("test")
     """
 
-    # pylint: disable=too-many-instance-attributes
     # 不用client id了，每個client有自己的dataset。
     def __init__(
         self,
@@ -188,22 +188,9 @@ class CustomFederatedDataset:
 
         It is controlled by a single flag, `_dataset_prepared` that is set True at the
         end of the function.
-
-        Notes
-        -----
-        The shuffling should happen before the resplitting. Here is the explanation.
-        If the dataset has a non-random order of samples e.g. each split has first
-        only label 0, then only label 1. Then in case of resplitting e.g.
-        someone creates: "train" train[:int(0.75 * len(train))], test: concat(
-        train[int(0.75 * len(train)):], test). The new test took the 0.25 of e.g.
-        the train that is only label 0 (assuming the equal count of labels).
-        Therefore, for such edge cases (for which we have split) the split should
-        happen before the resplitting.
         """
-        # 主要改動這裡，改成讀csv檔
-        self._dataset = datasets.load_dataset(
-            "csv", data_files=self._dataset_path
-        )
+        # NOTE: 主要改動這裡，改成讀csv檔
+        self._dataset = datasets.load_dataset("csv", data_files=self._dataset_path)
         if self._shuffle:
             # Note it shuffles all the splits. The self._dataset is DatasetDict
             # so e.g. {"train": train_data, "test": test_data}. All splits get shuffled.

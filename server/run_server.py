@@ -21,13 +21,21 @@ if not os.path.exists(save_path):
     os.mkdir(save_path)
 
 # Instantiate strategy.
+# 主要功能都會在strategy中處理
+# 因為想要每個client有一樣權重，所以用FedAvg。見以下詳細資料
+# https://biic.ee.nthu.edu.tw/blog-detail.php?id=2
+# https://www.royc30ne.com/fedavg/
 strategy = fl.server.strategy.FedAvg(
-    min_available_clients=1, # 只要一個client就可以進行finetune了
+    # 最少要兩人個client上傳model權重才會執行FL。如果只有一個model上傳權重，server會先擱著取得的權重，直到有第二個model權重
+    # 不可直接把min_available_client改成1，在fit時會噴error，別直接這麼做。見single-client-server的實作
+    min_available_clients=2,
     fraction_fit=1.0,
     fraction_evaluate=0.0,  # no client evaluation
     on_fit_config_fn=get_on_fit_config(),
     fit_metrics_aggregation_fn=fit_weighted_average,
-    evaluate_fn=get_evaluate_fn(cfg, cfg.train.save_every_round, cfg.num_rounds, save_path)
+    evaluate_fn=get_evaluate_fn(
+        cfg, cfg.train.save_every_round, cfg.num_rounds, save_path
+    ),
 )
 
 server = fl.server.start_server(

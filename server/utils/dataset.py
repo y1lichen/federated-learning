@@ -2,6 +2,7 @@ from transformers import AutoTokenizer
 from trl import DataCollatorForCompletionOnlyLM
 
 
+# prompts格式
 def formatting_prompts_func(example):
     output_texts = []
     # Constructing a standard Alpaca (https://github.com/tatsu-lab/stanford_alpaca#data-release) prompt
