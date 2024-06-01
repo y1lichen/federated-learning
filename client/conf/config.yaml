@@ -39,4 +39,4 @@ strategy:
 
 client_resources:
   num_cpus: 8
-  num_gpus: 4
+  num_gpus: 0
