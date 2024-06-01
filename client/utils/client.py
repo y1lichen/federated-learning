@@ -133,27 +133,3 @@ def gen_client_fn(
         ).to_client()
 
     return client_fn
-
-
-# 確定有file
-def validate_file(f):
-    if not os.path.exists(f):
-        # Argparse uses the ArgumentTypeError to give a rejection message like:
-        # error: argument input: x does not exist
-        raise argparse.ArgumentTypeError("{0} does not exist".format(f))
-    return f
-
-
-if __name__ == "__main__":
-    parser = ArgumentParser("GetFilePath")
-    parser.add_argument(
-        "-i",
-        "--input",
-        dest="filename",
-        required=True,
-        type=validate_file,
-        help="input file",
-        metavar="FILE",
-    )
-    args = parser.parse_args()
-    # print(args.filename)
