@@ -6,7 +6,7 @@ num_rounds: 5
 
 model:
   name: "yentinglin/Taiwan-LLM-7B-v2.1-chat"
-  quantization: 4 # 8 or 4 if you want to do quantization with BitsAndBytes
+  quantization: 8 # 8 or 4 if you want to do quantization with BitsAndBytes
   gradient_checkpointing: True
   lora:
     peft_lora_r: 32
