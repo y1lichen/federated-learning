@@ -61,6 +61,6 @@ def get_model(model_cfg: DictConfig):
         # 如果是load之前finetuned過的model，本來就是peft model了，所以可以直接回傳
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_cfg.peft_path, torch_dtype=torch.float16
-        ).to("cuda")
+        ).to("cpu")
 
     return get_peft_model(model, peft_config)
