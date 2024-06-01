@@ -38,7 +38,7 @@ def get_model(model_cfg: DictConfig):
 
     model = AutoModelForCausalLM.from_pretrained(
         model_cfg.name,
-        quantization_config=quantization_config,
+        # quantization_config=quantization_config,
         torch_dtype=torch.bfloat16,
     )
 

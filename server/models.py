@@ -51,7 +51,7 @@ def get_model(model_cfg: DictConfig):
     if not os.path.exists(model_cfg.peft_path):
         model = AutoModelForCausalLM.from_pretrained(
             model_cfg.name,
-            quantization_config=quantization_config,
+            # quantization_config=quantization_config,
             torch_dtype=torch.bfloat16,
         )
         model = prepare_model_for_kbit_training(
@@ -62,6 +62,5 @@ def get_model(model_cfg: DictConfig):
         model = AutoPeftModelForCausalLM.from_pretrained(
             model_cfg.peft_path, torch_dtype=torch.float16
         ).to("cuda")
-
 
     return get_peft_model(model, peft_config)
