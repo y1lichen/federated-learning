@@ -28,6 +28,7 @@ def fit_weighted_average(metrics):
 def get_evaluate_fn(cfg, save_every_round, total_round, save_path):
     """Return an evaluation function for saving global model."""
     model_cfg = cfg.model
+
     def evaluate(server_round: int, parameters, config):
         # Save model
         if server_round != 0 and (
@@ -43,9 +44,12 @@ def get_evaluate_fn(cfg, save_every_round, total_round, save_path):
 
     return evaluate
 
+
 def set_parameters(model, parameters: NDArrays) -> None:
     """Change the parameters of the model using the given ones."""
     peft_state_dict_keys = get_peft_model_state_dict(model).keys()
     params_dict = zip(peft_state_dict_keys, parameters)
-    state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
+    state_dict = OrderedDict(
+        {k: torch.tensor(v, requires_grad=False) for k, v in params_dict}
+    )
     set_peft_model_state_dict(model, state_dict)
