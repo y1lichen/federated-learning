@@ -122,8 +122,7 @@ def main(dataset_path: str):
             )
 
             # Do local training
-            with torch.no_grad():
-                results = trainer.train()
+            results = trainer.train()
 
             return (
                 self.get_parameters({}),
@@ -170,5 +169,6 @@ if __name__ == "__main__":
     fds = CustomFederatedDataset(
         dataset_path=args.filename, partitioners={"train": cfg.num_clients}
     )
-    main(args.filename)
+    with torch.no_grad():
+        main(args.filename)
     # print(args.filename)
