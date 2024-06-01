@@ -49,7 +49,5 @@ def set_parameters(model, parameters: NDArrays) -> None:
     """Change the parameters of the model using the given ones."""
     peft_state_dict_keys = get_peft_model_state_dict(model).keys()
     params_dict = zip(peft_state_dict_keys, parameters)
-    state_dict = OrderedDict(
-        {k: torch.tensor(v, requires_grad=True) for k, v in params_dict}
-    )
+    state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
     set_peft_model_state_dict(model, state_dict)
