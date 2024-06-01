@@ -1,7 +1,7 @@
 # Federated Instruction Tuning on General Dataset
 ---
 
-num_clients: 2 # total number of clients
+num_clients: 1 # total number of clients
 num_rounds: 5
 
 model:
