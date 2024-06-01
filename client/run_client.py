@@ -9,7 +9,7 @@ import flwr as fl
 from flwr_datasets import FederatedDataset
 
 from utils.dataset import get_tokenizer_and_data_collator_and_propt_formatting
-from utils.client import gen_client_fn
+from utils.client import gen_client_fn, set_parameters
 from utils.utils import get_on_fit_config, fit_weighted_average
 from utils.custom_fds import CustomFederatedDataset
 
@@ -51,9 +51,7 @@ if not os.path.exists(save_path):
 
 
 def main(dataset_path: str):
-    fds = CustomFederatedDataset(
-        dataset_path=dataset_path, partitioners={"train": cfg.num_clients}
-    )
+    fds = CustomFederatedDataset(dataset_path=dataset_path, partitioners={"train": 1})
     trainset = fds.load_partition(0)
 
     # Flower client
@@ -83,24 +81,14 @@ def main(dataset_path: str):
 
         def get_parameters(self, config: Dict[str, Scalar]) -> NDArrays:
             """Return the parameters of the current net."""
-
             state_dict = get_peft_model_state_dict(self.model)
             return [val.cpu().numpy() for _, val in state_dict.items()]
-
-        def set_parameters(self, model, parameters: NDArrays) -> None:
-            """Change the parameters of the model using the given ones."""
-            peft_state_dict_keys = get_peft_model_state_dict(model).keys()
-            params_dict = zip(peft_state_dict_keys, parameters)
-            state_dict = OrderedDict(
-                {k: torch.tensor(v, requires_grad=True) for k, v in params_dict}
-            )
-            set_peft_model_state_dict(model, state_dict)
 
         def fit(
             self, parameters: NDArrays, config: Dict[str, Scalar]
         ) -> Tuple[NDArrays, int, Dict]:
             """Implement distributed fit function for a given client."""
-            self.set_parameters(self.model, parameters)
+            set_parameters(self.model, parameters)
 
             new_lr = cosine_annealing(
                 int(config["current_round"]),
