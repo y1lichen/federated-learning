@@ -68,7 +68,6 @@ def main(dataset_path: str):
             data_collator,
             save_path,
         ):  # pylint: disable=too-many-arguments
-            torch.set_grad_enabled(True)
             self.device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
             self.train_cfg = train_cfg
             self.training_argumnets = TrainingArguments(**train_cfg.training_arguments)
@@ -123,7 +122,8 @@ def main(dataset_path: str):
             )
 
             # Do local training
-            results = trainer.train()
+            with torch.no_grad():
+                results = trainer.train()
 
             return (
                 self.get_parameters({}),
