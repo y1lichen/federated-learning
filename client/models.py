@@ -44,6 +44,7 @@ def get_model(model_cfg: DictConfig):
 
     model = prepare_model_for_kbit_training(
         model,
+        use_gradient_checkpointing=False,
         #  use_gradient_checkpointing=model_cfg.gradient_checkpointing
     )
 
