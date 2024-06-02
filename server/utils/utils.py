@@ -70,4 +70,5 @@ def get_init_weight() -> Parameters:
 
     # Convert the state_dict to a list of NumPy arrays for Flower
     initial_parameters = [v.numpy() for v in state_dict.values()]
+    initial_parameters = flwr.common.ndarrays_to_parameters(initial_parameters)
     return initial_parameters
