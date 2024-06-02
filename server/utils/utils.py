@@ -45,8 +45,29 @@ def get_init_weight() -> Parameters:
         return None
     latest_round_file = max(list_of_files, key=os.path.getctime)
     print("Loading pre-trained model from: ", latest_round_file)
-    npz = np.load(latest_round_file)
-    list_of_ndarrays = [npz[key] for key in npz.files]
-    # parameters = flwr.common.ndarrays_to_parameters(list_of_files)
-    # return parameters
-    return list_of_ndarrays
+    data = np.load(latest_round_file)
+    # Ensure that all items in the data are numerical and convert to PyTorch tensors
+    state_dict = {
+        k: torch.tensor(v)
+        for k, v in data.items()
+        if isinstance(v, np.ndarray)
+        and v.dtype
+        in [
+            np.float64,
+            np.float32,
+            np.float16,
+            np.int64,
+            np.int32,
+            np.int16,
+            np.int8,
+            np.uint64,
+            np.uint32,
+            np.uint16,
+            np.uint8,
+            np.bool_,
+        ]
+    }
+
+    # Convert the state_dict to a list of NumPy arrays for Flower
+    initial_parameters = [v.numpy() for v in state_dict.values()]
+    return initial_parameters
