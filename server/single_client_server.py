@@ -21,8 +21,6 @@ def main(num_clients=1, num_rounds=NUM_ROUNDS) -> None:
         min_fit_clients=num_clients,
         min_evaluate_clients=num_clients,
         min_available_clients=num_clients,
-        fraction_fit=1.0,
-        fit_metrics_aggregation_fn=fit_weighted_average,
         on_fit_config_fn=get_on_fit_config(),
         initial_parameters=get_init_weight(),
     )
