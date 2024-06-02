@@ -46,5 +46,6 @@ def get_init_weight() -> Parameters:
     latest_round_file = max(list_of_files, key=os.path.getctime)
     print("Loading pre-trained model from: ", latest_round_file)
     npz = np.load(latest_round_file)
-    parameters = flwr.common.ndarrays_to_parameters(npz)
+    list_of_ndarrays = [npz[key] for key in npz.files]
+    parameters = flwr.common.ndarrays_to_parameters(list_of_files)
     return parameters
