@@ -4,7 +4,7 @@ import argparse
 import os
 from hydra import compose, initialize
 from save_model_strategy import SaveModelStrategy
-from utils.utils import get_on_fit_config, get_init_weight
+from utils.utils import get_on_fit_config, fit_weighted_average, get_init_weight
 
 with initialize(config_path="conf"):
     cfg = compose(config_name="config")
@@ -22,6 +22,7 @@ def main(num_clients=1, num_rounds=NUM_ROUNDS) -> None:
         min_evaluate_clients=num_clients,
         min_available_clients=num_clients,
         fraction_fit=1.0,
+        fit_metrics_aggregation_fn=fit_weighted_average,
         on_fit_config_fn=get_on_fit_config(),
         initial_parameters=get_init_weight(),
     )
