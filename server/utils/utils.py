@@ -1,8 +1,13 @@
 from models import get_model
 from flwr.common.typing import NDArrays
+from flwr.common import Parameters
+import flwr
 from peft import get_peft_model_state_dict, set_peft_model_state_dict
 from collections import OrderedDict
 import torch
+import glob
+import os
+import numpy as np
 
 
 # Get a function that will be used to construct the config that the client's
@@ -31,3 +36,12 @@ def set_parameters(model, parameters: NDArrays) -> None:
     params_dict = zip(peft_state_dict_keys, parameters)
     state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
     set_peft_model_state_dict(model, state_dict)
+
+
+def get_init_weight() -> Parameters:
+    list_of_files = [fname for fname in glob.glob("./result/round-*")]
+    latest_round_file = max(list_of_files, key=os.path.getctime)
+    print("Loading pre-trained model from: ", latest_round_file)
+    npz = np.load(latest_round_file)
+    parameters = flwr.common.ndarrays_to_parameters(npz)
+    return parameters

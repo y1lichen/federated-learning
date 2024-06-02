@@ -11,7 +11,7 @@ def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
     """Return an evaluation function for saving global model."""
 
     def evaluate(server_round: int, parameters, config):
-        # Save model
+        # Save modelstate_dict = torch.load(latest_round_file)
         if server_round != 0 and (
             server_round == total_round or server_round % save_every_round == 0
         ):

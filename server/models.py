@@ -45,9 +45,6 @@ def get_model(model_cfg: DictConfig):
         task_type="CAUSAL_LM",
     )
 
-    model = None
-
-    # 如果peft path不存在代表沒finetune過
     model = AutoModelForCausalLM.from_pretrained(
         model_cfg.name,
         # quantization_config=quantization_config,
