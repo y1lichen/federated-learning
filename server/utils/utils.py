@@ -39,7 +39,10 @@ def set_parameters(model, parameters: NDArrays) -> None:
 
 
 def get_init_weight() -> Parameters:
-    list_of_files = [fname for fname in glob.glob("./result/round-*")]
+    list_of_files = [fname for fname in glob.glob("./results/round-*")]
+    if len(list_of_files) == 0:
+        print("not pre-trained model")
+        return None
     latest_round_file = max(list_of_files, key=os.path.getctime)
     print("Loading pre-trained model from: ", latest_round_file)
     npz = np.load(latest_round_file)
