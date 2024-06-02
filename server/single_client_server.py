@@ -23,7 +23,7 @@ def main(num_clients=1, num_rounds=NUM_ROUNDS) -> None:
         min_available_clients=num_clients,
         fraction_fit=1.0,
         fit_metrics_aggregation_fn=fit_weighted_average,
-        on_fit_config_fn=get_on_fit_config,
+        on_fit_config_fn=get_on_fit_config(),
     )
 
     # Start Flower server
