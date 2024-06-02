@@ -25,26 +25,6 @@ def fit_weighted_average(metrics):
     return {"train_loss": sum(losses) / sum(examples)}
 
 
-def get_evaluate_fn(cfg, save_every_round, total_round, save_path):
-    """Return an evaluation function for saving global model."""
-    model_cfg = cfg.model
-
-    def evaluate(server_round: int, parameters, config):
-        # Save model
-        if server_round != 0 and (
-            server_round == total_round or server_round % save_every_round == 0
-        ):
-            # Init model
-            model = get_model(model_cfg)
-            set_parameters(model, parameters)
-
-            model.save_pretrained(f"{save_path}/peft_{server_round}")
-
-        return 0.0, {}
-
-    return evaluate
-
-
 def set_parameters(model, parameters: NDArrays) -> None:
     """Change the parameters of the model using the given ones."""
     peft_state_dict_keys = get_peft_model_state_dict(model).keys()

@@ -1,7 +1,3 @@
-from argparse import ArgumentParser
-import argparse
-from collections import OrderedDict
-import os
 from typing import Callable, Dict, Tuple
 
 import flwr as fl
@@ -10,8 +6,8 @@ from flwr.common.typing import NDArrays, Scalar
 from omegaconf import DictConfig
 from trl import SFTTrainer
 from transformers import TrainingArguments
-from peft import get_peft_model_state_dict, set_peft_model_state_dict
-
+from peft import get_peft_model_state_dict
+from utils.utils import set_parameters
 from models import get_model, cosine_annealing
 
 
@@ -86,14 +82,6 @@ class FlowerClient(
             len(self.trainset),
             {"train_loss": results.training_loss},
         )
-
-
-def set_parameters(model, parameters: NDArrays) -> None:
-    """Change the parameters of the model using the given ones."""
-    peft_state_dict_keys = get_peft_model_state_dict(model).keys()
-    params_dict = zip(peft_state_dict_keys, parameters)
-    state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
-    set_peft_model_state_dict(model, state_dict)
 
 
 def gen_client_fn(

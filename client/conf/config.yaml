@@ -2,7 +2,7 @@
 ---
 
 num_clients: 20 # total number of clients
-num_rounds: 3
+num_rounds: 2
 
 model:
   name: "yentinglin/Taiwan-LLM-7B-v2.1-chat"

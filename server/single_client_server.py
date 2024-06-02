@@ -3,7 +3,7 @@ import argparse
 
 import os
 from hydra import compose, initialize
-from utils.utils import get_on_fit_config, fit_weighted_average, get_evaluate_fn
+from save_model_strategy import SaveModelStrategy
 
 
 with initialize(config_path="conf"):
@@ -17,15 +17,11 @@ if not os.path.exists(save_path):
 
 
 def main(num_clients=1, num_rounds=NUM_ROUNDS) -> None:
-    strategy = fl.server.strategy.FedAvg(
+    strategy = SaveModelStrategy(
         min_fit_clients=num_clients,
         min_evaluate_clients=num_clients,
         min_available_clients=num_clients,
-        on_fit_config_fn=get_on_fit_config(),
-        fit_metrics_aggregation_fn=fit_weighted_average,
-        evaluate_fn=get_evaluate_fn(
-            cfg, cfg.train.save_every_round, cfg.num_rounds, save_path
-        ),
+        fraction_fit=1.0,
     )
 
     # Start Flower server

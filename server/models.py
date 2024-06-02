@@ -48,20 +48,14 @@ def get_model(model_cfg: DictConfig):
     model = None
 
     # 如果peft path不存在代表沒finetune過
-    if not os.path.exists(model_cfg.peft_path):
-        model = AutoModelForCausalLM.from_pretrained(
-            model_cfg.name,
-            # quantization_config=quantization_config,
-            torch_dtype=torch.bfloat16,
-        )
-        model = prepare_model_for_kbit_training(
-            model,
-            #  use_gradient_checkpointing=model_cfg.gradient_checkpointing
-        )
-    else:
-        # 如果是load之前finetuned過的model，本來就是peft model了，所以可以直接回傳
-        model = AutoPeftModelForCausalLM.from_pretrained(
-            model_cfg.peft_path, torch_dtype=torch.float16
-        ).to("cpu")
+    model = AutoModelForCausalLM.from_pretrained(
+        model_cfg.name,
+        # quantization_config=quantization_config,
+        torch_dtype=torch.bfloat16,
+    )
+    model = prepare_model_for_kbit_training(
+        model,
+        #  use_gradient_checkpointing=model_cfg.gradient_checkpointing
+    )
 
     return get_peft_model(model, peft_config)
