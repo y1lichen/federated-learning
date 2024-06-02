@@ -1,4 +1,4 @@
-import flwr
+import flwr as fl
 
 
 class SaveModelStrategy(flwr.server.strategy.FedAvg):
