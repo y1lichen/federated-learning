@@ -1,7 +1,7 @@
 import flwr as fl
 
 
-class SaveModelStrategy(flwr.server.strategy.FedAvg):
+class SaveModelStrategy(fl.server.strategy.FedAvg):
 
     def aggregate_fit(
         self,
