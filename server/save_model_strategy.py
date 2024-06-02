@@ -1,14 +1,7 @@
 import flwr
-from utils.utils import get_on_fit_config, fit_weighted_average
 
 
 class SaveModelStrategy(flwr.server.strategy.FedAvg):
-
-    def fit_metrics_aggregation_fn(self):
-        return fit_weighted_average
-
-    def get_on_fit_config(self):
-        return get_on_fit_config
 
     def aggregate_fit(
         self,
