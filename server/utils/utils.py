@@ -20,16 +20,6 @@ def get_on_fit_config():
     return fit_config_fn
 
 
-def fit_weighted_average(metrics):
-    """Aggregation function for (federated) evaluation metrics."""
-    # Multiply accuracy of each client by number of examples used
-    losses = [num_examples * m["train_loss"] for num_examples, m in metrics]
-    examples = [num_examples for num_examples, _ in metrics]
-
-    # Aggregate and return custom metric (weighted average)
-    return {"train_loss": sum(losses) / sum(examples)}
-
-
 def set_parameters(model, parameters: NDArrays) -> None:
     """Change the parameters of the model using the given ones."""
     peft_state_dict_keys = get_peft_model_state_dict(model).keys()
@@ -47,6 +37,5 @@ def get_init_weight() -> Parameters:
     print("Loading pre-trained model from: ", latest_round_file)
     npz = np.load(latest_round_file)
     list_of_ndarrays = [npz[key] for key in npz.files]
-    # parameters = flwr.common.ndarrays_to_parameters(list_of_files)
-    # return parameters
-    return list_of_ndarrays
+    parameters = flwr.common.ndarrays_to_parameters(list_of_files)
+    return parameters
