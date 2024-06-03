@@ -14,7 +14,7 @@ QUESTION = "你要去上統計學嗎？"
 MODEL_NAME = cfg.model.name
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(
-    model_cfg.name,
+    MODEL_NAME,
     torch_dtype=torch.bfloat16,
 )
 print("model loaded...")
