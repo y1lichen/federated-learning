@@ -6,6 +6,7 @@ from transformers import AutoTokenizer
 from fastchat.conversation import get_conv_template
 from server.utils.utils import get_init_parameters
 from hydra import compose, initialize
+import flwr
 
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
@@ -21,6 +22,7 @@ model = AutoModelForCausalLM.from_pretrained(
 print("model loaded...")
 print("parameters loaded...")
 parameters = get_init_parameters()
+parameters = flwr.common.parameters_to_ndarrays(parameters)
 params_dict = zip(model.state_dict().keys(), parameters)
 state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
 model.load_state_dict(state_dict, strict=True)
