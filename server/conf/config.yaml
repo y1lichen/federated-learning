@@ -11,7 +11,7 @@ model:
   lora:
     peft_lora_r: 32
     peft_lora_alpha: 64
-  peft_path: "./results/peft_2/"
+  peft_path: "./results/peft/peft_2/"
 
 train:
   num_rounds: ${num_rounds}

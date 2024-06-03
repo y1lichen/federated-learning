@@ -8,6 +8,7 @@ import glob
 import os
 import numpy as np
 from typing import List
+from models import get_model
 
 
 # Get a function that will be used to construct the config that the client's
@@ -105,3 +106,20 @@ def get_init_parameters() -> Parameters:
     initial_parameters = [v.numpy() for v in state_dict.values()]
     initial_parameters = flwr.common.ndarrays_to_parameters(initial_parameters)
     return initial_parameters
+
+
+def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
+
+    def evaluate(server_round: int, parameters, config):
+        # Save model
+        if server_round != 0 and (
+            server_round == total_round or server_round % save_every_round == 0
+        ):
+            # Init model
+            model = get_model(model_cfg)
+            set_parameters(model, parameters)
+            model.save_pretrained(f"{save_path}/peft_{server_round}")
+
+        return 0.0, {}
+
+    return evaluate
