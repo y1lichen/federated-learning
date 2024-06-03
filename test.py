@@ -4,7 +4,7 @@ import torch
 from transformers import AutoModelForCausalLM
 from transformers import AutoTokenizer
 from fastchat.conversation import get_conv_template
-from server.utils.utils import get_init_parameters_as_statedict
+from server.utils.utils import get_init_parameters
 from hydra import compose, initialize
 
 with initialize(config_path="server/conf"):
@@ -20,9 +20,9 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 print("model loaded...")
 print("parameters loaded...")
-expected_keys = list(model.state_dict().keys())
-
-state_dict = get_init_parameters_as_statedict(expected_keys)
+parameters = get_init_parameters()
+params_dict = zip(model.state_dict().keys(), parameters)
+state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
 model.load_state_dict(state_dict, strict=True)
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
