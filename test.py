@@ -21,9 +21,9 @@ model = AutoModelForCausalLM.from_pretrained(
 print("model loaded...")
 print("parameters loaded...")
 expected_keys = list(model.state_dict().keys())
+
 state_dict = get_init_parameters_as_statedict(expected_keys)
-print(expected_keys)
-model.load_state_dict(state_dict)
+model.load_state_dict(state_dict, strict=True)
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 

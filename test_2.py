@@ -1,6 +1,7 @@
 # This python file is adapted from https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/gen_model_answer.py
 
 import torch
+import numpy as np
 from transformers import AutoModelForCausalLM
 from transformers import AutoTokenizer
 from fastchat.conversation import get_conv_template
