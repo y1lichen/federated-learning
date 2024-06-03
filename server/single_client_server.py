@@ -16,7 +16,7 @@ with initialize(config_path="conf"):
 NUM_ROUNDS = cfg.num_rounds
 
 
-save_path = "./results/peft/"
+save_path = "./results"
 if not os.path.exists(save_path):
     os.mkdir(save_path)
 
