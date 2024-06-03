@@ -38,7 +38,39 @@ def set_parameters(model, parameters: NDArrays) -> None:
     set_peft_model_state_dict(model, state_dict)
 
 
-def get_init_weight() -> Parameters:
+def get_init_parameters_as_statedict():
+    list_of_files = [fname for fname in glob.glob("./results/round-*")]
+    if len(list_of_files) == 0:
+        print("not pre-trained model")
+        return None
+    latest_round_file = max(list_of_files, key=os.path.getctime)
+    print("Loading pre-trained model from: ", latest_round_file)
+    data = np.load(latest_round_file)
+    # Ensure that all items in the data are numerical and convert to PyTorch tensors
+    state_dict = {
+        k: torch.tensor(v)
+        for k, v in data.items()
+        if isinstance(v, np.ndarray)
+        and v.dtype
+        in [
+            np.float64,
+            np.float32,
+            np.float16,
+            np.int64,
+            np.int32,
+            np.int16,
+            np.int8,
+            np.uint64,
+            np.uint32,
+            np.uint16,
+            np.uint8,
+            np.bool_,
+        ]
+    }
+    return state_dict
+
+
+def get_init_parameters() -> Parameters:
     list_of_files = [fname for fname in glob.glob("./results/round-*")]
     if len(list_of_files) == 0:
         print("not pre-trained model")
