@@ -13,6 +13,9 @@
 
 6. 改使用.npz儲存訓練結果 
     註：用peft model儲存方法見base-FL分支
+    
+7. 目前main分支取消使用GPU 
+    有關GPU相關設定，見base-FL分支
 
 # 操作說明
 
