@@ -1,4 +1,3 @@
-from models import get_model
 from flwr.common.typing import NDArrays
 from flwr.common import Parameters
 import flwr

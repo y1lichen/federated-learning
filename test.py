@@ -16,8 +16,10 @@ model = AutoModelForCausalLM.from_pretrained(
     model_cfg.name,
     torch_dtype=torch.bfloat16,
 )
+print("model loaded...")
 state_dict = get_init_parameters_as_statedict()
 model.load_state_dict(state_dict)
+print("parameters loaded...")
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
