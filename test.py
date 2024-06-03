@@ -1,39 +1,30 @@
 # This python file is adapted from https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/gen_model_answer.py
 
+import argparse
 import torch
-from transformers import AutoModelForCausalLM
+from peft import AutoPeftModelForCausalLM
 from transformers import AutoTokenizer
 from fastchat.conversation import get_conv_template
-from server.utils.utils import get_init_parameters
 from hydra import compose, initialize
-from collections import OrderedDict
-import flwr
 
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
 
-QUESTION = "你要去上統計學嗎？"
-MODEL_NAME = cfg.model.name
+QUESTION = "你要去上統計學嗎"
+parser = argparse.ArgumentParser()
+args = parser.parse_args()
 
 # Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    torch_dtype=torch.bfloat16,
+model = AutoPeftModelForCausalLM.from_pretrained(
+    cfg.model.peft_model, torch_dtype=torch.float16
 )
-print("model loaded...")
-print("parameters loaded...")
-parameters = get_init_parameters()
-parameters = flwr.common.parameters_to_ndarrays(parameters)
-params_dict = zip(model.state_dict().keys(), parameters)
-state_dict = OrderedDict({k: torch.Tensor(v) for k, v in params_dict})
-model.load_state_dict(state_dict, strict=True)
-
-tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+base_model = model.peft_config["default"].base_model_name_or_path
+tokenizer = AutoTokenizer.from_pretrained(base_model)
 
 # Generate answers
 temperature = 0.7
 choices = []
-conv = get_conv_template(MODEL_NAME)
+conv = get_conv_template(cfg.model.name)
 
 conv.append_message(conv.roles[0], QUESTION)
 conv.append_message(conv.roles[1], None)
