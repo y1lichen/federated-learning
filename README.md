@@ -6,9 +6,13 @@
 3. 改用本地資料訓練
 
    重寫[custom dataset](https://github.com/y1lichen/federated-learning/blob/main/client/utils/custom_fds.py)。面對flower這種api迭代快速的新framework，programmer最高指導原則為不動可以運作的程式碼。看不懂custom_dfs的code很正常，因為我也不懂。
-4. 拆分client & server
-
+4. 拆分client & server     
   在聯邦式學習中client和server勢必會分開部署，要降低client和server的藕合性。
+
+5. 設定為只需一個client即可進行federated learning
+
+6. 改使用.npz儲存訓練結果 
+    註：用peft model儲存方法見base-FL分支
 
 # 操作說明
 
@@ -20,17 +24,7 @@
 python run server/run_server.py
 ```
 3. 啟動client
-    有幾個client要訓練就啟動幾個client
 
 ```
 python client/run_client.py --i path/path_to_csv_data0.csv
-python client/run_client.py --i path/path_to_csv_data1.csv
-```
-**目前server中的conf設定最多client上限為5個client，若有大於5個client需調整**
-
-4. 測試訓練模型
-    訓練peft檔設定儲存在根目錄下的results檔案夾中
-```
-python test.py --peft-path=/path/to/trained-model-dir/ \
-    --question=“<問題內容>”
 ```
