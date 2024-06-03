@@ -108,7 +108,7 @@ def get_init_parameters() -> Parameters:
     return initial_parameters
 
 
-def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
+def get_evaluate_fn(cfg, save_every_round, total_round, save_path):
 
     def evaluate(server_round: int, parameters, config):
         # Save model
@@ -116,9 +116,9 @@ def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
             server_round == total_round or server_round % save_every_round == 0
         ):
             # Init model
-            model = get_model(model_cfg)
+            model = get_model(cfg.model)
             set_parameters(model, parameters)
-            model.save_pretrained(f"{save_path}/peft_{server_round}")
+            model.save_pretrained(f"results/peft_{server_round}")
 
         return 0.0, {}
 
