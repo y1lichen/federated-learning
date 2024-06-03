@@ -12,15 +12,18 @@ with initialize(config_path="server/conf"):
 
 QUESTION = "你要去上統計學嗎？"
 MODEL_NAME = cfg.model.name
+
 # Load model and tokenizer
 model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
     torch_dtype=torch.bfloat16,
 )
 print("model loaded...")
-state_dict = get_init_parameters_as_statedict()
-model.load_state_dict(state_dict)
 print("parameters loaded...")
+expected_keys = list(model.state_dict().keys())
+state_dict = get_init_parameters_as_statedict(expected_keys)
+print(expected_keys)
+model.load_state_dict(state_dict)
 
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 

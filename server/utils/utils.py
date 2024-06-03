@@ -7,6 +7,7 @@ import torch
 import glob
 import os
 import numpy as np
+from typing import List
 
 
 # Get a function that will be used to construct the config that the client's
@@ -37,7 +38,7 @@ def set_parameters(model, parameters: NDArrays) -> None:
     set_peft_model_state_dict(model, state_dict)
 
 
-def get_init_parameters_as_statedict():
+def get_init_parameters_as_statedict(keys: List[str]):
     list_of_files = [fname for fname in glob.glob("./results/round-*")]
     if len(list_of_files) == 0:
         print("not pre-trained model")
@@ -47,8 +48,9 @@ def get_init_parameters_as_statedict():
     data = np.load(latest_round_file)
     # Ensure that all items in the data are numerical and convert to PyTorch tensors
     state_dict = {
-        k: torch.tensor(v)
-        for k, v in data.items()
+        key: torch.tensor(data[f"arr_{i}"])
+        for i, key in enumerate(keys)
+        for key, v in data.items()
         if isinstance(v, np.ndarray)
         and v.dtype
         in [
