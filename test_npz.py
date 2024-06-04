@@ -1,12 +1,12 @@
 # This python file is adapted from https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/gen_model_answer.py
 
 import torch
-from peft import AutoPeftModelForCausalLM
 from transformers import AutoTokenizer
 from fastchat.conversation import get_conv_template
 from hydra import compose, initialize
 from server.utils.utils import set_parameters, get_init_parameters
 from transformers import AutoModelForCausalLM
+from server.models import get_model
 
 
 with initialize(config_path="server/conf"):
@@ -16,10 +16,7 @@ QUESTION = "你要去上統計學嗎"
 MODEL_NAME = cfg.model.name
 
 # Load model and tokenizer
-model = AutoModelForCausalLM.from_pretrained(
-    MODEL_NAME,
-    torch_dtype=torch.bfloat16,
-)
+model = get_model(cfg.model)
 parameters = get_init_parameters()
 set_parameters(model, parameters)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
