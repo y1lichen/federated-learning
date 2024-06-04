@@ -1,7 +1,7 @@
 # This python file is adapted from https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/gen_model_answer.py
 
 import torch
-from transformers import AutoTokenizer
+from transformers import AutoTokenizer, TextStreamer
 from hydra import compose, initialize
 from server.utils.utils import set_parameters, get_init_parameters
 from transformers import AutoModelForCausalLM
@@ -22,11 +22,13 @@ parameters = flwr.common.parameters_to_ndarrays(parameters)
 set_parameters(model, parameters)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
+streamer = TextStreamer(tokenizer=tokenizer)
 # Generate answers
 temperature = 0.7
-
 inputs = tokenizer(INPUT, return_tensors="pt")
-output = model.generate(**inputs, temperature=temperature, max_new_tokens=1024)
+output = model.generate(
+    **inputs, streamer=streamer, temperature=temperature, max_new_tokens=1024
+)
 output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
 print(">>> Ouput")
