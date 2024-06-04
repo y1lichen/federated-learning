@@ -27,7 +27,11 @@ streamer = TextStreamer(tokenizer=tokenizer)
 temperature = 0.7
 inputs = tokenizer(INPUT, return_tensors="pt")
 output = model.generate(
-    **inputs, streamer=streamer, temperature=temperature, max_new_tokens=512
+    **inputs,
+    streamer=streamer,
+    temperature=temperature,
+    max_new_tokens=1024,
+    repetition_penalty=0.2
 )
 output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
