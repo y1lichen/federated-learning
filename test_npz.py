@@ -7,6 +7,7 @@ from hydra import compose, initialize
 from server.utils.utils import set_parameters, get_init_parameters
 from transformers import AutoModelForCausalLM
 from server.models import get_model
+import flwr
 
 
 with initialize(config_path="server/conf"):
@@ -18,6 +19,7 @@ MODEL_NAME = cfg.model.name
 # Load model and tokenizer
 model = get_model(cfg.model)
 parameters = get_init_parameters()
+parameters = flwr.common.parameters_to_ndarrays(parameters)
 set_parameters(model, parameters)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
