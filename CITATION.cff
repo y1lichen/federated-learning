@@ -1,10 +1,9 @@
 cff-version: 1.0.0
-message: "If you use this software, please cite it as below"
+message: "If you use this software, it is welcome to cite it as below"
 authors:
 - family-names: "Chen"
   given-names: "Jefferson"
 title: "Personalization conversation LLM with federated learning"
 version: 1.0.0
-date-released: "2024-05-04"
+date-released: 2024-05-04
 url: "https://github.com/y1lichen/federated-learning"
-type: software
