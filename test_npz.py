@@ -20,8 +20,8 @@ model = AutoModelForCausalLM.from_pretrained(
     MODEL_NAME,
     torch_dtype=torch.bfloat16,
 )
-set_parameters(model, parameters)
 parameters = get_init_parameters()
+set_parameters(model, parameters)
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 # Generate answers
