@@ -25,7 +25,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
 # Generate answers
-inputs = tokenizer(f"{INSTRUCTION}" "{INPUT}", return_tensors="pt")
+inputs = tokenizer(f"{INSTRUCTION}{INPUT}", return_tensors="pt")
 output = model.generate(
     **inputs,
     streamer=streamer,
