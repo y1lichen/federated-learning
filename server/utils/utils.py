@@ -112,13 +112,12 @@ def get_evaluate_fn(cfg, save_every_round, total_round, save_path):
 
     def evaluate(server_round: int, parameters, config):
         # Save model
-        if server_round != 0 and (
-            server_round == total_round or server_round % save_every_round == 0
-        ):
+        if server_round != 0 and (server_round == total_round):
             # Init model
             model = get_model(cfg.model)
             set_parameters(model, parameters)
             model.save_pretrained(f"results/peft_{server_round}")
+            print(f"save round {server_round} model")
 
         return 0.0, {}
 
