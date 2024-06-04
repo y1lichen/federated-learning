@@ -15,6 +15,7 @@ with initialize(config_path="server/conf"):
 
 QUESTION = "你要去上統計學嗎"
 MODEL_NAME = cfg.model.name
+CONV_NAME = "twllm_v2"
 
 # Load model and tokenizer
 model = get_model(cfg.model)
@@ -26,7 +27,7 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 # Generate answers
 temperature = 0.7
 choices = []
-conv = get_conv_template(MODEL_NAME)
+conv = get_conv_template(CONV_NAME)
 
 conv.append_message(conv.roles[0], QUESTION)
 conv.append_message(conv.roles[1], None)
