@@ -30,8 +30,9 @@ output = model.generate(
     **inputs,
     streamer=streamer,
     temperature=temperature,
-    max_new_tokens=1024,
-    repetition_penalty=0.2
+    max_new_tokens=512,
+    repetition_penalty=0.5,
+    max_time=30.0
 )
 output_text = tokenizer.decode(output[0], skip_special_tokens=True)
 
