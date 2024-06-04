@@ -8,7 +8,6 @@ from utils.utils import (
     get_on_fit_config,
     fit_weighted_average,
     get_init_parameters,
-    get_evaluate_fn,
 )
 
 with initialize(config_path="conf"):
@@ -28,9 +27,6 @@ def main(num_clients=1, num_rounds=NUM_ROUNDS) -> None:
         min_available_clients=num_clients,
         on_fit_config_fn=get_on_fit_config(),
         initial_parameters=get_init_parameters(),
-        evaluate_fn=get_evaluate_fn(
-            cfg, cfg.train.save_every_round, cfg.num_rounds, save_path
-        ),
     )
 
     # Start Flower server
