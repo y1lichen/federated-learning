@@ -1,9 +1,20 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
 cff-version: 1.0.0
-message: "If you use this software, it is welcome to cite it as below"
+title: Personalization conversation LLM with federated learning
+message: >-
+  If you use this software, it is welcome to cite it using the
+  metadata from this file.
+type: software
 authors:
-- family-names: "Chen"
-  given-names: "Jefferson"
-title: "Personalization conversation LLM with federated learning"
+  - given-names: Jefferson
+    family-names: Chen
+    email: f1jefferson2@gmail.com
+identifiers:
+  - type: url
+    value: 'https://github.com/y1lichen/federated-learning'
+repository-code: 'https://github.com/y1lichen/federated-learning'
+commit: 1.0.0
 version: 1.0.0
-date-released: 2024-05-04
-url: "https://github.com/y1lichen/federated-learning"
+date-released: '2025-06-04'
