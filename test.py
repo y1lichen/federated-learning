@@ -1,13 +1,10 @@
-# This python file is adapted from https://github.com/lm-sys/FastChat/blob/main/fastchat/llm_judge/gen_model_answer.py
-
-import torch
 from transformers import AutoTokenizer, TextStreamer
 from hydra import compose, initialize
 from server.utils.utils import set_parameters, get_init_parameters
 from transformers import AutoModelForCausalLM
 from server.models import get_model
-import flwr
 
+import flwr
 
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
