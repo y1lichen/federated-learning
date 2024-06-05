@@ -109,6 +109,8 @@ def main(dataset_path: str):
                 train_dataset=self.trainset,
                 formatting_func=self.formatting_prompts_func,
                 data_collator=self.data_collator,
+                # 在這調batch size
+                dataset_batch_size=800,
             )
 
             # Do local training
