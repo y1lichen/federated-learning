@@ -1,9 +1,9 @@
+from typing import List
 import flwr as fl
 import numpy as np
 
 
 class SaveModelStrategy(fl.server.strategy.FedAvg):
-
     def aggregate_fit(
         self,
         rnd: int,
