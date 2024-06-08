@@ -38,12 +38,12 @@ inputs = tokenizer.apply_chat_template(
         },
         {"role": "user", "content": INPUT},
     ],
-    tokenize=False,
+    tokenize=True,
     add_generation_prompt=True,
 )
 
 outputs = model.generate(
-    **inputs,
+    inputs,
     streamer=streamer,
     temperature=0.62,
     max_new_tokens=1024,
