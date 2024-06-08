@@ -40,6 +40,7 @@ inputs = tokenizer.apply_chat_template(
     ],
     tokenize=True,
     add_generation_prompt=True,
+    return_tensors="pt",
 )
 
 outputs = model.generate(
