@@ -24,6 +24,7 @@ model = get_model(cfg.model)
 parameters = get_init_parameters()
 parameters = flwr.common.parameters_to_ndarrays(parameters)
 set_parameters(model, parameters)
+model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
