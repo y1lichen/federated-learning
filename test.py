@@ -34,7 +34,7 @@ inputs = tokenizer.apply_chat_template(
     [
         {
             "role": "system",
-            "content": "你是好朋友，同是也是同學",
+            "content": "你是好朋友，同時也是同學",
         },
         {"role": "user", "content": INPUT},
     ],
@@ -47,7 +47,7 @@ outputs = model.generate(
     inputs,
     streamer=streamer,
     temperature=0.62,
-    max_new_tokens=1024,
+    # max_new_tokens=1024,
     repetition_penalty=1.15,
     max_time=60.0,
 )
