@@ -28,13 +28,14 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
 # Generate answers
-system_prompt = f"[INST] {INSTRUCTION} [/INST]\n [USER] {INPUT} [/USER]"
+# system_prompt = f"[INST] {INSTRUCTION} [/INST]\n [USER] {INPUT} [/USER]"
+system_prompt = INPUT
 inputs = tokenizer(system_prompt, return_tensors="pt")
 outputs = model.generate(
     **inputs,
     streamer=streamer,
     temperature=0.62,
-    max_new_tokens=512,
+    max_new_tokens=1024,
     repetition_penalty=1.15,
     max_time=60.0,
 )
