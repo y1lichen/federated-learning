@@ -29,8 +29,19 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 streamer = TextStreamer(tokenizer=tokenizer)
 # Generate answers
 # system_prompt = f"[INST] {INSTRUCTION} [/INST]\n [USER] {INPUT} [/USER]"
-system_prompt = INPUT
-inputs = tokenizer(system_prompt, return_tensors="pt")
+# inputs = tokenizer(system_prompt, return_tensors="pt")
+inputs = tokenizer.apply_chat_template(
+    [
+        {
+            "role": "system",
+            "content": "你是好朋友，同是也是同學",
+        },
+        {"role": "user", "content": INPUT},
+    ],
+    tokenize=False,
+    add_generation_prompt=True,
+)
+
 outputs = model.generate(
     **inputs,
     streamer=streamer,
