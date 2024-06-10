@@ -12,12 +12,9 @@ from typing import List
 
 # Get a function that will be used to construct the config that the client's
 # fit() method will receive
-def get_on_fit_config():
-    def fit_config_fn(server_round: int):
-        fit_config = {"current_round": server_round}
-        return fit_config
-
-    return fit_config_fn
+def get_on_fit_config(server_round: int):
+    fit_config = {"batch_size": 256, "current_round": server_round}
+    return fit_config
 
 
 def fit_weighted_average(metrics):

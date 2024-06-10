@@ -26,16 +26,6 @@ def get_evaluate_fn(model_cfg, save_every_round, total_round, save_path):
     return evaluate
 
 
-# Get a function that will be used to construct the config that the client's
-# fit() method will receive
-def get_on_fit_config():
-    def fit_config_fn(server_round: int):
-        fit_config = {"current_round": server_round}
-        return fit_config
-
-    return fit_config_fn
-
-
 def fit_weighted_average(metrics):
     """Aggregation function for (federated) evaluation metrics."""
     # Multiply accuracy of each client by number of examples used

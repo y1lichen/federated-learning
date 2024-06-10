@@ -6,22 +6,18 @@ from flwr.common import NDArrays
 from hydra import compose, initialize
 
 import flwr as fl
-from flwr_datasets import FederatedDataset
 
 from utils.dataset import get_tokenizer_and_data_collator_and_propt_formatting
 from utils.client import gen_client_fn, set_parameters
-from utils.utils import get_on_fit_config, fit_weighted_average
 from utils.custom_fds import CustomFederatedDataset
 
-from argparse import ArgumentParser
-from collections import OrderedDict
 
 import torch
-from flwr.common.typing import NDArrays, Scalar
+
 from omegaconf import DictConfig
 from trl import SFTTrainer
 from transformers import TrainingArguments
-from peft import get_peft_model_state_dict, set_peft_model_state_dict
+from peft import get_peft_model_state_dict
 
 from models import get_model, cosine_annealing
 
@@ -109,6 +105,8 @@ def main(dataset_path: str):
                 train_dataset=self.trainset,
                 formatting_func=self.formatting_prompts_func,
                 data_collator=self.data_collator,
+                # 在這調batch size
+                dataset_batch_size=800,
             )
 
             # Do local training

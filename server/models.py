@@ -5,7 +5,7 @@ from transformers import BitsAndBytesConfig
 from peft import get_peft_model, LoraConfig
 from peft.utils import prepare_model_for_kbit_training
 from peft import AutoPeftModelForCausalLM
-import os
+
 
 import math
 
@@ -20,6 +20,16 @@ def cosine_annealing(
 
     cos_inner = math.pi * current_round / total_round
     return lrate_min + 0.5 * (lrate_max - lrate_min) * (1 + math.cos(cos_inner))
+
+
+def _get_lora_config(model_cfg: DictConfig):
+    peft_config = LoraConfig(
+        r=model_cfg.lora.peft_lora_r,
+        lora_alpha=model_cfg.lora.peft_lora_alpha,
+        lora_dropout=0.075,
+        task_type="CAUSAL_LM",
+    )
+    return peft_config
 
 
 def get_model(model_cfg: DictConfig):
@@ -38,12 +48,7 @@ def get_model(model_cfg: DictConfig):
             f"Use 4-bit or 8-bit quantization. You passed: {model_cfg.quantization}/"
         )
 
-    peft_config = LoraConfig(
-        r=model_cfg.lora.peft_lora_r,
-        lora_alpha=model_cfg.lora.peft_lora_alpha,
-        lora_dropout=0.075,
-        task_type="CAUSAL_LM",
-    )
+    peft_config = _get_lora_config(model_cfg)
 
     model = AutoModelForCausalLM.from_pretrained(
         model_cfg.name,
