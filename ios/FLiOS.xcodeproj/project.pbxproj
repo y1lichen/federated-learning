@@ -108,6 +108,7 @@
 		50B5A2C6294C848000B0ABC6 /* flwr in Frameworks */ = {isa = PBXBuildFile; productRef = 50B5A2C5294C848000B0ABC6 /* flwr */; };
 		50CDF0E1299D807300AEBD55 /* DataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50CDF0E0299D807300AEBD55 /* DataLoader.swift */; };
 		50EB97CA29AC9C94000AC771 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 50EB97C929AC9C94000AC771 /* Constants.swift */; };
+		D41D7B192C1707A500EB0774 /* Transformers in Frameworks */ = {isa = PBXBuildFile; productRef = D41D7B182C1707A500EB0774 /* Transformers */; };
 		D4E7BC7F2C105F0200D47811 /* flwr in Frameworks */ = {isa = PBXBuildFile; productRef = D4E7BC7E2C105F0200D47811 /* flwr */; };
 /* End PBXBuildFile section */
 
@@ -232,6 +233,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D41D7B192C1707A500EB0774 /* Transformers in Frameworks */,
 				50B5A2C6294C848000B0ABC6 /* flwr in Frameworks */,
 				D4E7BC7F2C105F0200D47811 /* flwr in Frameworks */,
 			);
@@ -447,6 +449,7 @@
 			packageProductDependencies = (
 				50B5A2C5294C848000B0ABC6 /* flwr */,
 				D4E7BC7E2C105F0200D47811 /* flwr */,
+				D41D7B182C1707A500EB0774 /* Transformers */,
 			);
 			productName = FlowerCoreML;
 			productReference = 21B5406D2865B14000185DEE /* FLiOS.app */;
@@ -478,6 +481,7 @@
 			mainGroup = 21B540642865B14000185DEE;
 			packageReferences = (
 				D4E7BC7D2C105F0200D47811 /* XCLocalSwiftPackageReference "flwr_package" */,
+				D41D7B172C1707A500EB0774 /* XCRemoteSwiftPackageReference "swift-transformers" */,
 			);
 			productRefGroup = 21B5406E2865B14000185DEE /* Products */;
 			projectDirPath = "";
@@ -829,6 +833,17 @@
 		};
 /* End XCLocalSwiftPackageReference section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		D41D7B172C1707A500EB0774 /* XCRemoteSwiftPackageReference "swift-transformers" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/huggingface/swift-transformers";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.8;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		21A77B312865B55D0062EBD8 /* Flower */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -837,6 +852,11 @@
 		50B5A2C5294C848000B0ABC6 /* flwr */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = flwr;
+		};
+		D41D7B182C1707A500EB0774 /* Transformers */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D41D7B172C1707A500EB0774 /* XCRemoteSwiftPackageReference "swift-transformers" */;
+			productName = Transformers;
 		};
 		D4E7BC7E2C105F0200D47811 /* flwr */ = {
 			isa = XCSwiftPackageProductDependency;
