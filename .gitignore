@@ -4,6 +4,7 @@
 pyrightconfig.json
 
 data/
+!data/line_to_llama_flw.py
 
 outputs/
 
