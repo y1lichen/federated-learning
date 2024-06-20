@@ -9,7 +9,7 @@ import pandas as pd
 # 特定user的對話記錄
 chat_hist = "data/training_data_flw0.csv"
 # 隨機取10筆聊天記錄放到instruction
-chat_hist_df = pd.read_csv(chat_hist).sample(n=10)
+chat_hist_df = pd.read_csv(chat_hist).sample(n=25)
 
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
@@ -34,12 +34,14 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
+content = "你是好朋友，也是同學。以下是對話的範例，請依照對話範例的口氣回答。"
+chat_hist_df.apply(lambda row: content + f"對方：{row["instruction"]}\n你：{row["output"]}\n", axis=1)
 # Generate answers
 inputs = tokenizer.apply_chat_template(
     [
         {
             "role": "system",
-            "content": "你是好朋友，也是同學。",
+            "content": content,
         },
         {"role": "user", "content": INPUT},
     ],
