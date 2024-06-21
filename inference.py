@@ -34,7 +34,7 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
-content = "你是好朋友，也是同學。以下是對話的範例，請依照對話範例中你的口氣回答對方。"
+content = "你是好朋友，也是同學。以下是對話的範例，請依照對話範例中你的口氣回答問題。請注意你的回答要付合對方的問題"
 
 for row in chat_hist_df.itertuples(index=True, name="Pandas"):
     content += f"對方：{row.instruction}\n你：{row.output}\n"
@@ -55,7 +55,7 @@ inputs = tokenizer.apply_chat_template(
 outputs = model.generate(
     inputs,
     streamer=streamer,
-    temperature=0.7,
+    temperature=0.72,
     # max_new_tokens=1024,
     repetition_penalty=1.15,
     # max_time=60.0,
