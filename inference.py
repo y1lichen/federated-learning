@@ -10,7 +10,7 @@ import pandas as pd
 chat_hist = "data/training_data_flw0.csv"
 # 隨機取10筆聊天記錄放到instruction
 # chat_hist_df = pd.read_csv(chat_hist).sample(n=25)
-chat_hist_df = pd.read_csv(chat_hist).head(n=25)
+chat_hist_df = pd.read_csv(chat_hist).head(n=30)
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
 
