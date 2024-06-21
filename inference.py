@@ -37,10 +37,10 @@ streamer = TextStreamer(tokenizer=tokenizer)
 content = "你是好朋友，也是同學。請你以好友的口氣回答問題，注意你的回答要符合對方的問題。"
 
 
-templates = []
+templates = [{"role": "system", "content": content}]
 for row in chat_hist_df.itertuples(index=True, name="Pandas"):
     templates.append({"role": "user", "content": row.instruction})
-    templates.append({"role": "system", "content": row.output})
+    templates.append({"role": "assistant", "content": row.output})
 templates.append(
     {"role": "user", "content": INPUT},
 )
