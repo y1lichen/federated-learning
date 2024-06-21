@@ -34,19 +34,19 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
-content = "你是好朋友，也是同學。以下是對話的範例，請依照對話範例中你的口氣回答問題。請注意你的回答要付合對方的問題"
+content = "你是好朋友，也是同學。請注意你的回答要付合對方的問題。"
 
+
+templates = []
 for row in chat_hist_df.itertuples(index=True, name="Pandas"):
-    content += f"對方：{row.instruction}\n你：{row.output}\n"
+    templates.append({"role": "user", "content": row.instruction})
+    templates.append({"role": "system", "content": row.output})
+templates.append(
+    {"role": "user", "content": INPUT},
+)
 # Generate answers
 inputs = tokenizer.apply_chat_template(
-    [
-        {
-            "role": "system",
-            "content": content,
-        },
-        {"role": "user", "content": INPUT},
-    ],
+    templates,
     tokenize=True,
     add_generation_prompt=True,
     return_tensors="pt",
