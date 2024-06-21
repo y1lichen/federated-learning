@@ -35,7 +35,9 @@ tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
 content = "你是好朋友，也是同學。以下是對話的範例，請依照對話範例的口氣回答。"
-chat_hist_df.apply(lambda row: content + f"對方：{row["instruction"]}\n你：{row["output"]}\n", axis=1)
+chat_hist_df.apply(
+    lambda row: content + f"對方：{row['instruction']}\n你：{row['output']}\n", axis=1
+)
 # Generate answers
 inputs = tokenizer.apply_chat_template(
     [
