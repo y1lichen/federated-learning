@@ -34,7 +34,7 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
-content = "你是好朋友，也是同學。請注意你的回答要付合對方的問題。"
+content = "你是好朋友，也是同學。請你以好友的口氣回答問題，注意你的回答要符合對方的問題。"
 
 
 templates = []
@@ -55,9 +55,11 @@ inputs = tokenizer.apply_chat_template(
 outputs = model.generate(
     inputs,
     streamer=streamer,
-    temperature=0.72,
+    temperature=0.69,
     # max_new_tokens=1024,
-    repetition_penalty=1.15,
+    repetition_penalty=1.2,
+    top_k=40,  # default 50
+    top_p=1.0  # default 1.0
     # max_time=60.0,
 )
 
