@@ -59,7 +59,7 @@ outputs = model.generate(
     # max_new_tokens=1024,
     repetition_penalty=1.2,
     top_k=40,  # default 50
-    top_p=1.0  # default 1.0
+    top_p=0.7  # default 1.0
     # max_time=60.0,
 )
 
