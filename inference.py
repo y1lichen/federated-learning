@@ -9,8 +9,8 @@ import pandas as pd
 # 特定user的對話記錄
 chat_hist = "data/training_data_flw0.csv"
 # 隨機取10筆聊天記錄放到instruction
-# chat_hist_df = pd.read_csv(chat_hist).sample(n=25)
-chat_hist_df = pd.read_csv(chat_hist).head(n=30)
+chat_hist_df = pd.read_csv(chat_hist).sample(n=25)
+# chat_hist_df = pd.read_csv(chat_hist).head(n=30)
 with initialize(config_path="server/conf"):
     cfg = compose(config_name="config")
 
@@ -55,7 +55,7 @@ inputs = tokenizer.apply_chat_template(
 outputs = model.generate(
     inputs,
     streamer=streamer,
-    temperature=0.8,
+    temperature=0.77,
     # max_new_tokens=1024,
     repetition_penalty=1.2,
     top_k=40,  # default 50
