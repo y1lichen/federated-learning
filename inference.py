@@ -58,7 +58,7 @@ outputs = model.generate(
     temperature=0.72,
     # max_new_tokens=1024,
     repetition_penalty=1.1,
-    top_k=30,  # default 50
+    top_k=50,  # default 50
     top_p=0.8  # default 1.0
     # max_time=60.0,
 )
