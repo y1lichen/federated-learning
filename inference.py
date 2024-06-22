@@ -20,8 +20,8 @@ INSTRUCTION = "Below is an instruction that describes a task. Write a response t
 # INPUT = "明天要一起吃早餐嗎"
 # INPUT = "健嗎"
 # INPUT = "你微甲作業寫了？"
-INPUT = "你要去上統計學？"
-# INPUT = "我睡過頭了"
+# INPUT = "你要去上統計學？"
+INPUT = "我睡過頭了"
 
 MODEL_NAME = cfg.model.name
 
@@ -34,7 +34,7 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
-content = "你是好朋友，也是同學。請你以好友的口氣回答問題，注意你的回答要符合對方的問題。"
+content = "你是好朋友，也是同學。請你以和過去相同的口氣回答問題，注意你的回答要符合對方的問題。"
 
 
 templates = [{"role": "system", "content": content}]
@@ -55,7 +55,7 @@ inputs = tokenizer.apply_chat_template(
 outputs = model.generate(
     inputs,
     streamer=streamer,
-    temperature=0.69,
+    temperature=0.8,
     # max_new_tokens=1024,
     repetition_penalty=1.2,
     top_k=40,  # default 50
