@@ -55,11 +55,11 @@ inputs = tokenizer.apply_chat_template(
 outputs = model.generate(
     inputs,
     streamer=streamer,
-    temperature=0.77,
+    temperature=0.72,
     # max_new_tokens=1024,
-    repetition_penalty=1.2,
-    top_k=40,  # default 50
-    top_p=0.7  # default 1.0
+    repetition_penalty=1.1,
+    top_k=30,  # default 50
+    top_p=0.8  # default 1.0
     # max_time=60.0,
 )
 
