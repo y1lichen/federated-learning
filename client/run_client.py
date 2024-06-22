@@ -23,7 +23,7 @@ from models import get_model, cosine_annealing
 
 
 NUM_ROUNDS = 5
-save_path = "./results/"
+
 
 with initialize(config_path="conf"):
     cfg = compose(config_name="config")
@@ -32,9 +32,6 @@ with initialize(config_path="conf"):
 cfg.num_rounds = NUM_ROUNDS
 cfg.train.num_rounds = NUM_ROUNDS
 
-# Create output directory
-if not os.path.exists(save_path):
-    os.mkdir(save_path)
 
 # Partition dataset and get dataloaders
 # We set the number of partitions to 20 for fast processing.
@@ -46,9 +43,13 @@ if not os.path.exists(save_path):
 ) = get_tokenizer_and_data_collator_and_propt_formatting(cfg.model.name)
 
 
-def main(dataset_path: str):
+def main(dataset_path: str, idx: int):
     fds = CustomFederatedDataset(dataset_path=dataset_path, partitioners={"train": 1})
     trainset = fds.load_partition(0)
+    # Create output directory
+    save_path = f"./results/client_{idx}"
+    if not os.path.exists(save_path):
+        os.mkdir(save_path)
 
     # Flower client
     class CustomClient(fl.client.NumPyClient):
@@ -69,10 +70,10 @@ def main(dataset_path: str):
             self.formatting_prompts_func = formatting_prompts_func
             self.data_collator = data_collator
             self.save_path = save_path
-
+            # set index
+            self.index = idx
             # instantiate model
             self.model = get_model(model_cfg)
-
             self.trainset = trainset
 
         def get_parameters(self, config: Dict[str, Scalar]) -> NDArrays:
@@ -111,7 +112,11 @@ def main(dataset_path: str):
 
             # Do local training
             results = trainer.train()
-
+            # save model
+            torch.save(
+                self.model.state_dict(),
+                self.save_path + f"round_{config['current_round']}.pth",
+            )
             return (
                 self.get_parameters({}),
                 len(self.trainset),
@@ -145,17 +150,23 @@ def validate_file(f):
 if __name__ == "__main__":
     parser = ArgumentParser("GetFilePath")
     parser.add_argument(
-        "-i",
-        "--input",
+        "-f",
+        "--file",
         dest="filename",
         required=True,
         type=validate_file,
         help="input file",
         metavar="FILE",
     )
-    args = parser.parse_args()
-    fds = CustomFederatedDataset(
-        dataset_path=args.filename, partitioners={"train": cfg.num_clients}
+    parser.add_argument(
+        "-i",
+        "--idx",
+        dest="index",
+        required=True,
+        type=int,
+        help="id of the client",
+        metavar="INDEX",
     )
-    main(args.filename)
+    args = parser.parse_args()
+    main(args.filename, args.index)
     # print(args.filename)
