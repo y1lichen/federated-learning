@@ -7,7 +7,7 @@ import flwr
 import pandas as pd
 
 # 特定user的對話記錄
-chat_hist = "data/training_data_flw0.csv"
+chat_hist = "data/training_data_flw1.csv"
 # 隨機取10筆聊天記錄放到instruction
 chat_hist_df = pd.read_csv(chat_hist).sample(n=25)
 # chat_hist_df = pd.read_csv(chat_hist).head(n=30)
@@ -22,7 +22,9 @@ INSTRUCTION = "Below is an instruction that describes a task. Write a response t
 # INPUT = "你微甲作業寫了？"
 # INPUT = "你要去上統計學？"
 # INPUT = "我睡過頭了"
-INPUT = "你下午有空嗎"
+# INPUT = "你下午有空嗎"
+INPUT = "要打一場嗎"
+# INPUT = "你要去吃拉麵嗎"
 
 MODEL_NAME = cfg.model.name
 
