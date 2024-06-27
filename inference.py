@@ -34,7 +34,7 @@ model = model.merge_and_unload()
 tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
 
 streamer = TextStreamer(tokenizer=tokenizer)
-content = "你是好朋友，也是同學。請你以和過去相同的口氣回答問題，注意你的回答要符合對方的問題。"
+content = "你是好朋友，也是同學。請你以和過去回答相同的語氣回答問題，注意你回答的內容要符合對方的問題。"
 
 
 templates = [{"role": "system", "content": content}]
