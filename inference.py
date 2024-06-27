@@ -21,7 +21,8 @@ INSTRUCTION = "Below is an instruction that describes a task. Write a response t
 # INPUT = "健嗎"
 # INPUT = "你微甲作業寫了？"
 # INPUT = "你要去上統計學？"
-INPUT = "我睡過頭了"
+# INPUT = "我睡過頭了"
+INPUT = "你下午有空嗎"
 
 MODEL_NAME = cfg.model.name
 
