@@ -2,7 +2,7 @@ from argparse import ArgumentParser, ArgumentTypeError
 import os
 from typing import Callable, Dict, Tuple
 import warnings
-from flwr.common import NDArrays
+from flwr.common import NDArrays, Scalar
 from hydra import compose, initialize
 
 import flwr as fl
