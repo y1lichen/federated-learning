@@ -7,13 +7,13 @@ import torch
 import glob
 import os
 import numpy as np
-from typing import List
+from typing import List, Optional
 
 
 # Get a function that will be used to construct the config that the client's
 # fit() method will receive
 def get_on_fit_config(server_round: int):
-    fit_config = {"batch_size": 256, "current_round": server_round}
+    fit_config = {"batch_size": 512, "current_round": server_round}
     return fit_config
 
 
@@ -68,7 +68,7 @@ def get_init_parameters_as_statedict(keys: List[str]):
     return state_dict
 
 
-def get_init_parameters() -> Parameters:
+def get_init_parameters() -> Optional[Parameters]:
     list_of_files = [fname for fname in glob.glob("./results/round-*")]
     if len(list_of_files) == 0:
         print("not pre-trained model")

@@ -198,9 +198,7 @@ class CustomFederatedDataset:
         Therefore, for such edge cases (for which we have split) the split should
         happen before the resplitting.
         """
-        self._dataset = datasets.load_dataset(
-            "csv", data_files=self._dataset_path
-        )
+        self._dataset = datasets.load_dataset("csv", data_files=self._dataset_path)
         if self._shuffle:
             # Note it shuffles all the splits. The self._dataset is DatasetDict
             # so e.g. {"train": train_data, "test": test_data}. All splits get shuffled.

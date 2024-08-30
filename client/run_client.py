@@ -107,7 +107,7 @@ def main(dataset_path: str, idx: int):
                 formatting_func=self.formatting_prompts_func,
                 data_collator=self.data_collator,
                 # 在這調batch size
-                dataset_batch_size=800,
+                dataset_batch_size=512,
             )
 
             # Do local training
