@@ -22,6 +22,7 @@ if not os.path.exists(save_path):
 
 def main(num_clients=1, num_rounds=NUM_ROUNDS) -> History:
     strategy = SaveModelStrategy(
+        fraction_fit=1.0,
         min_fit_clients=num_clients,
         min_evaluate_clients=num_clients,
         min_available_clients=num_clients,

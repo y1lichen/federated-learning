@@ -115,7 +115,7 @@ def main(dataset_path: str, idx: int):
             # save model
             torch.save(
                 self.model.state_dict(),
-                self.save_path + f"round_{config['current_round']}.pth",
+                self.save_path + f"/round_{config['current_round']}.pth",
             )
             return (
                 self.get_parameters({}),
