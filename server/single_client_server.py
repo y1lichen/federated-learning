@@ -32,7 +32,7 @@ def main(num_clients=1, num_rounds=NUM_ROUNDS) -> History:
 
     # Start Flower server
     hist = fl.server.start_server(
-        server_address="[::]:8080",
+        server_address="[::]:8000",
         config=fl.server.ServerConfig(num_rounds=num_rounds),
         strategy=strategy,
     )

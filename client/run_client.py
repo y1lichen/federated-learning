@@ -152,7 +152,7 @@ def main(dataset_path: str, idx: int):
 
     # Start client
     fl.client.start_client(
-        server_address="127.0.0.1:8080",
+        server_address="127.0.0.1:8000",
         client=CustomClient(
             cfg.model,
             cfg.train,
