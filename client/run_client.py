@@ -44,8 +44,9 @@ cfg.train.num_rounds = NUM_ROUNDS
 
 
 def main(dataset_path: str, idx: int):
-    fds = CustomFederatedDataset(dataset_path=dataset_path, partitioners={"train": 1})
-    trainset = fds.load_partition(0)
+    fds = CustomFederatedDataset(dataset_path=dataset_path, partitioners={"train": 0.8})
+    trainset = fds.load_full("train")
+    validation_set = fds.load_full("test")
     # Create output directory
     save_path = f"./results/client_{idx}"
     if not os.path.exists(save_path):
@@ -58,6 +59,7 @@ def main(dataset_path: str, idx: int):
             model_cfg: DictConfig,
             train_cfg: DictConfig,
             trainset,
+            validation_set,
             tokenizer,
             formatting_prompts_func,
             data_collator,
@@ -75,6 +77,7 @@ def main(dataset_path: str, idx: int):
             # instantiate model
             self.model = get_model(model_cfg)
             self.trainset = trainset
+            self.validation_set = validation_set
 
         def get_parameters(self, config: Dict[str, Scalar]) -> NDArrays:
             """Return the parameters of the current net."""
@@ -123,6 +126,30 @@ def main(dataset_path: str, idx: int):
                 {"train_loss": results.training_loss},
             )
 
+        def evaluate(
+            self, parameters: NDArrays, config: Dict[str, Scalar]
+        ) -> Tuple[float, int, Dict]:
+            """Evaluate the model on local validation set."""
+            set_parameters(self.model, parameters)
+
+            # 在这里评估验证集
+            trainer = SFTTrainer(
+                model=self.model,
+                tokenizer=self.tokenizer,
+                args=self.training_argumnets,
+                max_seq_length=self.train_cfg.seq_length,
+                eval_dataset=self.validation_set,  # 使用验证集
+                formatting_func=self.formatting_prompts_func,
+                data_collator=self.data_collator,
+                dataset_batch_size=512,
+            )
+            eval_results = trainer.evaluate()
+            return (
+                eval_results["eval_loss"],
+                len(self.validation_set),
+                {"accuracy": eval_results.get("eval_accuracy", 0)},
+            )
+
     # Start client
     fl.client.start_client(
         server_address="127.0.0.1:8080",
@@ -131,6 +158,7 @@ def main(dataset_path: str, idx: int):
             cfg.train,
             trainset,
             tokenizer,
+            validation_set,
             formatting_prompts_func,
             data_collator,
             save_path,
